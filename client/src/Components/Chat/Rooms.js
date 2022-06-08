@@ -5,34 +5,35 @@ import { MainContext } from "../../context"
 import "../../Style/rooms.scss"
 
 export const Rooms = ({ socket }) => {
-  const { username, room, setRoom, setUsers } = useContext(MainContext)
-
+  const { user, room, users, rooms, setUser, setRoom, setUsers, setRooms } =
+    useContext(MainContext)
   useEffect(() => {
+    console.log(user)
     socket.on("users", (users) => {
       setUsers(users)
+      console.log(`users :${users}`)
+      //find a way to save id/ username from data and
+      // save user
     })
   }, [socket, setUsers])
+
+  //connect to room
   // create new room
   const onSumbitNewRoom = (e) => {
-    // add condition if room doesn t exist
-    // add condition for minimun letter in room input
     //create new room
-    socket.emit("new room", { username, room })
+    socket.emit("new room", { user, room })
     //else join room
   }
-  // join new room
-  const onSubmitJoinRoom = (e) => {
-    // change value of room in context
-    // passing socket.name as key and set state of room as key
-    // then send socket.emit passing room as argument
-    socket.emit("join room", { username, room })
-    //else join room
-  }
+
+  //retrieve list of rooms opened and users in the rooms
+  // emit a join room
+
   return (
     <main className="rooms">
+      <h2>users connected : {users.length}</h2>
       <h1>Create a new room</h1>
       <input
-        placeholder="Enter your room name"
+        placeholder="Create room"
         value={room}
         onChange={(e) => setRoom(e.target.value)}
       ></input>

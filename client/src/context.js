@@ -3,7 +3,8 @@ import React, { useState } from "react"
 const MainContext = React.createContext()
 
 const MainProvider = ({ children }) => {
-  const [username, setUsername] = useState("")
+  const [isConnected, setIsConnected] = useState(false)
+  const [lastMessage, setLastMessage] = useState(null)
   const [room, setRoom] = useState("")
   const [users, setUsers] = useState([])
   const [rooms, setRooms] = useState([])
@@ -11,11 +12,13 @@ const MainProvider = ({ children }) => {
   return (
     <MainContext.Provider
       value={{
-        username,
+        isConnected,
+        setIsConnected,
+        lastMessage,
+        setLastMessage,
         room,
         users,
         rooms,
-        setUsername,
         setRoom,
         setUsers,
         setRooms,

@@ -8,8 +8,7 @@ import { Avatar } from "./Avatar"
 import "../../Style/chat.scss"
 
 export const Chat = ({ socket }) => {
-  const { room, users, username, setUsername, setRoom } =
-    useContext(MainContext)
+  const { room, users, user, setUser, setRoom } = useContext(MainContext)
   let navigate = useNavigate()
   const [text, setText] = useState("")
   const [messages, setMessages] = useState([])
@@ -21,8 +20,8 @@ export const Chat = ({ socket }) => {
 
   window.onpopstate = (e) => logout()
   useEffect(() => {
-    if (!username) return navigate("/")
-  }, [username])
+    if (!user) return navigate("/")
+  }, [user])
 
   useEffect(() => {
     socket.on("message", (msg) => {
@@ -60,14 +59,14 @@ export const Chat = ({ socket }) => {
 
   const logout = () => {
     socket.disconnect()
-    setUsername("")
+    setUser("")
     setRoom("")
     navigate("/")
   }
 
   const messagesList = () => {
     const list = messages.map((msg, i) => {
-      if (msg.user !== username) {
+      if (msg.user !== user) {
         return (
           <div className="message" key={i}>
             <p>{msg.text}</p>
@@ -91,7 +90,7 @@ export const Chat = ({ socket }) => {
       <div className="chat-header">
         <div className="menu">
           <div className="profile">
-            <Avatar username={username} />
+            <Avatar username={user} />
           </div>
           <h1>{room.slice(0, 1).toUpperCase() + room.slice(1)}</h1>
           <button onClick={logout}>logout</button>
@@ -104,10 +103,10 @@ export const Chat = ({ socket }) => {
           {users.length > 0 && (
             <div className="users">
               {users.map((user) => {
-                if (user.username !== username) {
+                if (user.user !== user) {
                   return (
                     <div key={user.id} className="profile">
-                      <Avatar username={user.username} />
+                      <Avatar username={user.user} />
                     </div>
                   )
                 }
