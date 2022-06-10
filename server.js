@@ -28,12 +28,22 @@ io.on("connection", (socket) => {
     users.push({
       userID: id,
       username: socket.username,
+      connected: socket.connected,
     })
   }
+
   socket.emit("users", users)
   socket.broadcast.emit("new user connected", {
     userID: socket.id,
     username: socket.username,
+    connected: true,
+  })
+
+  socket.on("private message", ({ content, to }) => {
+    socket.to(to).emit("private message", {
+      content,
+      from: socket.id,
+    })
   })
 
   //user leave room

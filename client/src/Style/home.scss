@@ -1,42 +1,25 @@
 @import "./globals";
 .homepage {
-  width: 500px;
-  height: 500px;
-  padding: 2rem;
-  background-color: $primaryColor;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: $whiteColor;
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
-  border-radius: 5px;
-  form {
-    width: 80%;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    input {
-      height: 50px;
-      width: 100%;
-      background-color: $whiteColor;
-      color: $primaryColor;
-      border: none;
-      padding-left: 1rem;
-      border-radius: 5px;
-      &:focus {
-        outline: none;
-      }
-    }
-    button {
-      font-size: 1rem;
-      padding: 0.5rem 1rem 0.5rem 1rem;
-      width: 100px;
-      border: none;
-      background-color: $secondaryColor;
-      border-radius: 5px;
-      color: $whiteColor;
-      &:hover {
-        cursor: pointer;
-      }
-    }
+  .left-panel {
+    background-color: $backgroundColor;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 180px;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  .right-panel {
+    height: 100%;
+    margin-left: 180px;
+    color: $backgroundColor;
   }
 }

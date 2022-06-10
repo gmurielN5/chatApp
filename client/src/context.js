@@ -1,32 +1,26 @@
 import React, { useState } from "react"
 
-const MainContext = React.createContext()
+const AccountContext = React.createContext()
 
-const MainProvider = ({ children }) => {
-  const [isConnected, setIsConnected] = useState(false)
-  const [lastMessage, setLastMessage] = useState(null)
-  const [room, setRoom] = useState("")
-  const [users, setUsers] = useState([])
-  const [rooms, setRooms] = useState([])
+const UserContext = ({ children }) => {
+  const [user, setUser] = useState({
+    username: "",
+    loggedIn: null,
+  })
+  const [players, setPlayers] = useState([])
 
   return (
-    <MainContext.Provider
+    <AccountContext.Provider
       value={{
-        isConnected,
-        setIsConnected,
-        lastMessage,
-        setLastMessage,
-        room,
-        users,
-        rooms,
-        setRoom,
-        setUsers,
-        setRooms,
+        user,
+        setUser,
+        players,
+        setPlayers,
       }}
     >
       {children}
-    </MainContext.Provider>
+    </AccountContext.Provider>
   )
 }
 
-export { MainContext, MainProvider }
+export { AccountContext, UserContext }

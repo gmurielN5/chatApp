@@ -1,0 +1,59 @@
+@import "./globals";
+.login {
+  width: 100%;
+  height: 100vh;
+  background-color: $backgroundColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .homepage {
+    width: 50%;
+    height: 80%;
+    padding: 5rem;
+    background-color: $primaryColor;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .header {
+      text-align: center;
+      padding: 10px;
+    }
+    form {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      input {
+        height: 50px;
+        width: 100%;
+        background-color: $whiteColor;
+        color: $primaryColor;
+        border: none;
+        padding-left: 1rem;
+        border-radius: 5px;
+        &:focus {
+          outline: none;
+        }
+      }
+      .error {
+        color: red;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.5rem 1rem 0.5rem 1rem;
+        width: 100px;
+        border: none;
+        background-color: $secondaryColor;
+        border-radius: 5px;
+        color: $whiteColor;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
