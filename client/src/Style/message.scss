@@ -9,12 +9,13 @@
   align-items: flex-start;
   .header {
     width: 100%;
-    border-bottom: 1px solid $secondaryColor;
+
+    border-bottom: 1px solid $primaryColor;
     .name {
       padding-left: 10px;
       padding-top: 10px;
       p {
-        color: $secondaryColor;
+        color: $primaryColor;
       }
     }
 
@@ -34,7 +35,7 @@
       span {
         padding-left: 5px;
         font-size: small;
-        color: $secondaryColor;
+        color: $primaryColor;
       }
     }
   }
@@ -43,28 +44,6 @@
     width: 100%;
     p {
       color: $secondaryColor;
-    }
-  }
-  .message-input {
-    width: 100%;
-    padding: 10px;
-    form {
-      input {
-        width: 75%;
-        resize: none;
-        padding: 10px;
-        line-height: 1.5;
-        border-radius: 5px;
-        border: 1px solid $secondaryColor;
-        color: $secondaryColor;
-      }
-      button {
-        background-color: $backgroundColor;
-        color: $whiteColor;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 5px;
-      }
     }
   }
 }

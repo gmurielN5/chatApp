@@ -13,13 +13,14 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 180px;
+    width: 25%;
     overflow-x: hidden;
     padding-top: 20px;
   }
   .right-panel {
     height: 100%;
-    margin-left: 180px;
+    width: 75%;
+    margin-left: 25%;
     color: $backgroundColor;
   }
 }

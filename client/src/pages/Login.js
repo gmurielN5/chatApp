@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { AccountContext } from "../context"
+import { context } from "../context"
 import { Form, Field, Formik } from "formik"
 import { useNavigate } from "react-router"
 import * as Yup from "yup"
@@ -7,7 +7,7 @@ import * as Yup from "yup"
 import "../Style/login.scss"
 
 export const Login = () => {
-  const { setUser } = useContext(AccountContext)
+  const { setUser } = useContext(context)
   const navigate = useNavigate()
   const validateUsername = Yup.object().shape({
     username: Yup.string()

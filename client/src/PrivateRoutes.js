@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { AccountContext } from "./context"
+import { context } from "./context"
 
 const { Outlet, Navigate } = require("react-router")
 
 const useAuth = () => {
-  const { user } = useContext(AccountContext)
+  const { user } = useContext(context)
   return user && user.loggedIn
 }
 

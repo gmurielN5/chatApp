@@ -1,12 +1,12 @@
-import { UserContext } from "./context"
+import { ContextApp } from "./context"
 
 import Views from "./Views"
 
 function App() {
   return (
-    <UserContext>
+    <ContextApp>
       <Views />
-    </UserContext>
+    </ContextApp>
   )
 }
 

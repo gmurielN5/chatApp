@@ -1,26 +1,33 @@
-import React, { useState } from "react"
+import React, { useState, createContext, useEffect } from "react"
+import socketconn from "./socket"
 
-const AccountContext = React.createContext()
+const context = createContext()
 
-const UserContext = ({ children }) => {
+const ContextApp = ({ children }) => {
   const [user, setUser] = useState({
     username: "",
     loggedIn: null,
   })
   const [players, setPlayers] = useState([])
+  const [socket, setSocket] = useState(socketconn)
+
+  useEffect(() => {
+    setSocket(socketconn)
+  }, [setSocket])
 
   return (
-    <AccountContext.Provider
+    <context.Provider
       value={{
         user,
         setUser,
         players,
         setPlayers,
+        socket,
       }}
     >
       {children}
-    </AccountContext.Provider>
+    </context.Provider>
   )
 }
 
-export { AccountContext, UserContext }
+export { context, ContextApp }
