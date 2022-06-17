@@ -5,7 +5,8 @@ import * as Yup from "yup"
 import "../Style/chat.scss"
 
 export const Chat = ({ player }) => {
-  const { socket } = useContext(context)
+  const { socket, players, setPlayers } = useContext(context)
+  console.log(players)
   return (
     <div className="message-input">
       <Formik
@@ -18,8 +19,18 @@ export const Chat = ({ player }) => {
             content: values.message,
             to: player.userID,
           })
-          console.log(values.message)
-          console.log(player)
+          setPlayers((prevState) => {
+            const updatePlayer = prevState.map((obj) => {
+              if (obj.userID === player.userID) {
+                return {
+                  ...obj,
+                  message: [{ content: values.message, fromSelf: true }],
+                }
+              }
+              return obj
+            })
+            return updatePlayer
+          })
           actions.resetForm()
         }}
       >

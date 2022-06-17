@@ -47,6 +47,10 @@ const useSocket = () => {
       // push new user to list of users
       setPlayers((players) => [...new Set([...players, user])])
     })
+    socket.on("private message", ({ content, from }) => {
+      console.log(content)
+      console.log(from)
+    })
     socket.on("connect_error", (err) => {
       if (err.message === "invalid username") {
         setUser({ loggedIn: false })

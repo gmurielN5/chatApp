@@ -7,6 +7,7 @@ import "../Style/message.scss"
 export const Message = () => {
   const { players } = useContext(context)
 
+  console.log(players)
   return (
     <>
       {players.map((player) =>
@@ -26,7 +27,7 @@ export const Message = () => {
             <div className="message">
               <p>message</p>
             </div>
-            <Chat player={player} />
+            <Chat player={player} key={player.userID} />
           </div>
         ) : null
       )}

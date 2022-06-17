@@ -40,8 +40,6 @@ io.on("connection", (socket) => {
   })
 
   socket.on("private message", ({ content, to }) => {
-    console.log(content)
-    console.log(to)
     socket.to(to).emit("private message", {
       content,
       from: socket.id,
