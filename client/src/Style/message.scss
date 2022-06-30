@@ -40,10 +40,55 @@
     }
   }
   .message {
-    padding: 10px;
+    height: 100%;
     width: 100%;
-    p {
-      color: $secondaryColor;
+    margin-top: 10px;
+    overflow-y: auto;
+    align-content: flex-start;
+    flex-direction: column;
+
+    .msg {
+      padding-left: 0.5rem;
+      max-width: 220px;
+      margin-left: 0px;
+      margin-bottom: 0.5rem;
+      p {
+        width: 100%;
+        background-color: $primaryColor;
+        color: $whiteColor;
+        font-size: 1rem;
+        font-weight: 300;
+        border-radius: 0px 10px 10px 10px;
+        padding: 1rem;
+      }
+
+      span {
+        color: $primaryColor;
+        font-size: 0.6rem;
+        padding-left: 0.5rem;
+        font-weight: 200;
+      }
+    }
+    .msg-right {
+      display: flex;
+      margin-left: auto;
+      flex-direction: column;
+      padding-right: 0.5rem;
+      margin-right: 0px;
+      max-width: 220px;
+      p {
+        width: 100%;
+        background-color: white;
+        color: $primaryColor;
+        border-radius: 10px 0px 10px 10px;
+        margin-bottom: 0.25rem;
+      }
+      span {
+        width: 100%;
+        color: $backgroundColor;
+        padding-right: 0.5rem;
+        text-align: right;
+      }
     }
   }
 }

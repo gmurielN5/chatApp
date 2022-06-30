@@ -6,7 +6,6 @@ import "../Style/message.scss"
 
 export const Message = () => {
   const { players } = useContext(context)
-
   console.log(players)
   return (
     <>
@@ -24,9 +23,15 @@ export const Message = () => {
                 <span>{player.connected ? "online" : "offline"}</span>
               </div>
             </div>
-            <div className="message">
-              <p>message</p>
-            </div>
+            {player.message &&
+              player.message.map((msg) => (
+                <div className="message">
+                  <div className={`msg ${msg.fromSelf ? "msg-right" : ""}`}>
+                    <p>{msg.content}</p>
+                    {msg.fromSelf && <span>you</span>}
+                  </div>
+                </div>
+              ))}
             <Chat player={player} key={player.userID} />
           </div>
         ) : null

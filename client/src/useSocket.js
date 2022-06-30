@@ -10,6 +10,7 @@ const useSocket = () => {
   useEffect(() => {
     socket.auth = { username }
     socket.connect()
+    //todo socket connect and disconnect doesn t work
     socket.on("connect", () => {
       setPlayers((prevPlayers) => {
         return [...prevPlayers].map((player) => {
@@ -37,6 +38,9 @@ const useSocket = () => {
         let newUser = {
           ...user,
           self: user.userID === socket.id,
+          selected: false,
+          message: [],
+          hasNewmessage: false,
         }
         setPlayers((players) => [...players, newUser])
       })
@@ -48,8 +52,22 @@ const useSocket = () => {
       setPlayers((players) => [...new Set([...players, user])])
     })
     socket.on("private message", ({ content, from }) => {
-      console.log(content)
-      console.log(from)
+      //todo push message to from
+      setPlayers((prevState) => {
+        const updatePlayer = prevState.map((obj) => {
+          if (obj.userID === from) {
+            console.log(obj)
+
+            return {
+              ...obj,
+              hasNewmessage: true,
+              message: [{ content, fromSelf: false }],
+            }
+          }
+          return obj
+        })
+        return updatePlayer
+      })
     })
     socket.on("connect_error", (err) => {
       if (err.message === "invalid username") {
@@ -60,6 +78,8 @@ const useSocket = () => {
       socket.off("connect")
       socket.off("disconnect")
       socket.off("users")
+      socket.off("new user connected")
+      socket.off("private message")
       socket.off("connect_error")
     }
   }, [socket, username, setUser, players, setPlayers])

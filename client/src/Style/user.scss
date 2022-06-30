@@ -4,6 +4,26 @@
   padding-left: 10px;
   padding-bottom: 10px;
   border: 1px solid $secondaryColor;
+  .profile {
+    display: flex;
+    margin-top: 10px;
+    padding-right: 10px;
+    .name {
+      width: 100%;
+    }
+    .new-messsage {
+      height: 18px;
+      width: 18px;
+      background-color: $blue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      span {
+        font-size: small;
+      }
+    }
+  }
   .status {
     padding-left: 10px;
     .icon {

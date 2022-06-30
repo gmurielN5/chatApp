@@ -2,8 +2,10 @@
 
 .message-input {
   width: 100%;
-  padding: 10px;
+  margin: 10px;
   form {
+    display: flex;
+    align-items: baseline;
     input {
       width: 75%;
       resize: none;
@@ -17,7 +19,7 @@
       background-color: $backgroundColor;
       color: $whiteColor;
       padding: 10px;
-      margin-top: 10px;
+      margin-left: 10px;
       border-radius: 5px;
     }
   }

@@ -6,23 +6,44 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
 
+const port = 8000
+
 const cors = require("cors")
 const util = require("util")
-const port = 8000
+const crypto = require("crypto")
+
+const randomId = () => crypto.randomBytes(8).toString("hex")
+const { findSesssion, saveSession, findAllSessions } = require("./SessionStore")
 
 app.use(cors())
 
+//session ID (private): used to authenticate user upon reconnection
+// username (public) : identifier for exchanging messages
+
 io.use((socket, next) => {
+  const sessionID = socket.handshake.auth.sessionID
+  if (sessionID) {
+    //find existing session
+    const session = findSesssion(sessionID)
+    console.log(session)
+    if (session) {
+      socket.sessionID = sessionID
+      socket.userID = session.userID
+      socket.username = session.username
+      return next()
+    }
+  }
   const username = socket.handshake.auth.username
   if (!username) {
     return next(new Error("invalid username"))
   }
+  socket.sessionID = randomId()
+  socket.userID = randomId()
   socket.username = username
   next()
 })
 
 io.on("connection", (socket) => {
-  console.log("a user connected ")
   const users = []
   for (let [id, socket] of io.of("/").sockets) {
     users.push({
