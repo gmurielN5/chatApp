@@ -5,11 +5,43 @@ import { context } from "./context"
 
 const useSocket = () => {
   const { socket, user, setUser, players, setPlayers } = useContext(context)
-  const { username } = user
+  const { sessionID } = user
 
   useEffect(() => {
-    socket.auth = { username }
-    socket.connect()
+    console.log(user)
+    //check if there is a token in user state
+    if (sessionID) {
+      socket.auth = { sessionID }
+      socket.connect()
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          loggedIn: true,
+        }
+      })
+    }
+
+    socket.on("session", ({ sessionID, userID }) => {
+      // attach the session ID to the next reconnection attempts
+      socket.auth = { sessionID }
+      // store session in the localStorage
+      localStorage.setItem("sessionID", sessionID)
+      //save the ID of the user
+      socket.userID = userID
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          sessionID,
+        }
+      })
+    })
+
+    socket.on("connect_error", (err) => {
+      if (err.message === "invalid username") {
+        console.log(err.message)
+        setUser({ loggedIn: false })
+      }
+    })
     //todo socket connect and disconnect doesn t work
     socket.on("connect", () => {
       setPlayers((prevPlayers) => {
@@ -33,7 +65,6 @@ const useSocket = () => {
       setUser({ loggedIn: false })
     })
     socket.on("users", (users) => {
-      console.log(users)
       users.forEach((user) => {
         let newUser = {
           ...user,
@@ -69,11 +100,7 @@ const useSocket = () => {
         return updatePlayer
       })
     })
-    socket.on("connect_error", (err) => {
-      if (err.message === "invalid username") {
-        setUser({ loggedIn: false })
-      }
-    })
+
     return () => {
       socket.off("connect")
       socket.off("disconnect")
@@ -82,7 +109,7 @@ const useSocket = () => {
       socket.off("private message")
       socket.off("connect_error")
     }
-  }, [socket, username, setUser, players, setPlayers])
+  }, [socket, user, sessionID, setUser, players, setPlayers])
 }
 
 export default useSocket

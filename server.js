@@ -25,7 +25,6 @@ io.use((socket, next) => {
   if (sessionID) {
     //find existing session
     const session = findSesssion(sessionID)
-    console.log(session)
     if (session) {
       socket.sessionID = sessionID
       socket.userID = session.userID
@@ -44,6 +43,22 @@ io.use((socket, next) => {
 })
 
 io.on("connection", (socket) => {
+  //add session
+  const user = saveSession(socket.sessionID, {
+    userID: socket.userID,
+    username: socket.username,
+    connected: true,
+  })
+
+  socket.emit("session", {
+    sessionID: socket.sessionID,
+    userID: socket.userID,
+  })
+
+  // join the "userID" room
+  socket.join(socket.userID)
+
+  //send session details to client
   const users = []
   for (let [id, socket] of io.of("/").sockets) {
     users.push({

@@ -7,7 +7,7 @@ import * as Yup from "yup"
 import "../Style/login.scss"
 
 export const Login = () => {
-  const { setUser } = useContext(context)
+  const { setUser, user, socket } = useContext(context)
   const navigate = useNavigate()
   const validateUsername = Yup.object().shape({
     username: Yup.string()
@@ -27,8 +27,13 @@ export const Login = () => {
           }}
           validationSchema={validateUsername}
           onSubmit={(values) => {
-            setUser({ ...values, loggedIn: true })
-            navigate("/home")
+            const username = values.username
+            setUser({ ...user, loggedIn: true })
+            if (username) {
+              socket.auth = { username }
+              socket.connect()
+              navigate("/home")
+            }
           }}
         >
           {({ errors, touched }) => (

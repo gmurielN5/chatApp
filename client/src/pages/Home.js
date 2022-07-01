@@ -1,13 +1,9 @@
-import useSocket from "../useSocket"
-
 import Sidebar from "../Components/Sidebar"
 import { Message } from "../Components/Message"
 
 import "../Style/home.scss"
 
 const Home = () => {
-  useSocket()
-
   return (
     <main className="homepage">
       <div className="left-panel">

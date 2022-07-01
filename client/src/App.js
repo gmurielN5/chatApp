@@ -1,13 +1,9 @@
-import { ContextApp } from "./context"
-
+import useSocket from "./useSocket"
 import Views from "./Views"
 
 function App() {
-  return (
-    <ContextApp>
-      <Views />
-    </ContextApp>
-  )
+  useSocket()
+  return <Views />
 }
 
 export default App

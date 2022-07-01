@@ -8,13 +8,11 @@ const sessions = []
 
 // get session id
 const findSesssion = (id) => {
-  console.log(id)
   return sessions.find((session) => session.id === id)
 }
 
 // joins the user to a session
 const saveSession = (id, session) => {
-  console.log(`id ${id} session: ${session}`)
   const user = { id, session }
   sessions.push(user)
   return { user }
@@ -22,7 +20,6 @@ const saveSession = (id, session) => {
 
 // get all sessions
 const findAllSessions = () => {
-  console.log(sessions)
   return sessions
 }
 

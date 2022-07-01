@@ -6,7 +6,7 @@ import "../Style/message.scss"
 
 export const Message = () => {
   const { players } = useContext(context)
-  console.log(players)
+
   return (
     <>
       {players.map((player) =>
