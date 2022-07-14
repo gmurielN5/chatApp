@@ -1,0 +1,26 @@
+@import "./globals";
+
+.message-input {
+  width: 100%;
+  margin: 10px;
+  form {
+    display: flex;
+    align-items: baseline;
+    input {
+      width: 75%;
+      resize: none;
+      padding: 10px;
+      line-height: 1.5;
+      border-radius: 5px;
+      border: 1px solid $secondaryColor;
+      color: $secondaryColor;
+    }
+    button {
+      background-color: $backgroundColor;
+      color: $whiteColor;
+      padding: 10px;
+      margin-left: 10px;
+      border-radius: 5px;
+    }
+  }
+}

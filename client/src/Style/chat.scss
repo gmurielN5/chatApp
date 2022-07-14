@@ -1,26 +1,94 @@
 @import "./globals";
-
-.message-input {
+.message-panel {
   width: 100%;
-  margin: 10px;
-  form {
-    display: flex;
-    align-items: baseline;
-    input {
-      width: 75%;
-      resize: none;
-      padding: 10px;
-      line-height: 1.5;
-      border-radius: 5px;
-      border: 1px solid $secondaryColor;
-      color: $secondaryColor;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  .header {
+    width: 100%;
+
+    border-bottom: 1px solid $primaryColor;
+    .name {
+      padding-left: 10px;
+      padding-top: 10px;
+      p {
+        color: $primaryColor;
+      }
     }
-    button {
-      background-color: $backgroundColor;
-      color: $whiteColor;
-      padding: 10px;
-      margin-left: 10px;
-      border-radius: 5px;
+
+    .status {
+      padding-left: 10px;
+      padding-bottom: 10px;
+      .icon {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: red;
+      }
+      .connected {
+        background-color: green;
+      }
+      span {
+        padding-left: 5px;
+        font-size: small;
+        color: $primaryColor;
+      }
+    }
+  }
+  .message {
+    height: 100%;
+    width: 100%;
+    margin-top: 10px;
+    overflow-y: auto;
+    align-content: flex-start;
+    flex-direction: column;
+
+    .msg {
+      padding-left: 0.5rem;
+      max-width: 220px;
+      margin-left: 0px;
+      margin-bottom: 0.5rem;
+      p {
+        width: 100%;
+        background-color: $primaryColor;
+        color: $whiteColor;
+        font-size: 1rem;
+        font-weight: 300;
+        border-radius: 0px 10px 10px 10px;
+        padding: 1rem;
+      }
+
+      span {
+        color: $primaryColor;
+        font-size: 0.6rem;
+        padding-left: 0.5rem;
+        font-weight: 200;
+      }
+    }
+    .msg-right {
+      display: flex;
+      margin-left: auto;
+      flex-direction: column;
+      padding-right: 0.5rem;
+      margin-right: 0px;
+      max-width: 220px;
+      p {
+        width: 100%;
+        background-color: white;
+        color: $primaryColor;
+        border-radius: 10px 0px 10px 10px;
+        margin-bottom: 0.25rem;
+      }
+      span {
+        width: 100%;
+        color: $backgroundColor;
+        padding-right: 0.5rem;
+        text-align: right;
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import Sidebar from "../Components/Sidebar"
-import { Message } from "../Components/Message"
+import { Chat } from "../Components/Chat"
 
 import "../Style/home.scss"
 
@@ -10,7 +10,7 @@ export const Home = () => {
         <Sidebar />
       </div>
       <div className="right-panel">
-        <Message />
+        <Chat />
       </div>
     </main>
   )
