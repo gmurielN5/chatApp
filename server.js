@@ -21,20 +21,20 @@ const io = new Server(server, {
 const crypto = require("crypto")
 
 const randomId = () => crypto.randomBytes(8).toString("hex")
-const { InMemorySessionStore } = require("./sessionStore")
-const { InMemoryMessageStore } = require("./messageStore")
-const sessionStore = new InMemorySessionStore()
-const messageStore = new InMemoryMessageStore()
+const { RedisSessionStore } = require("./sessionStore")
+const sessionStore = new RedisSessionStore(redisClient)
+const { RedisMessageStore } = require("./messageStore")
+const messageStore = new RedisMessageStore(redisClient)
 
 app.use(cors(corsConfig))
 
-io.use((socket, next) => {
+io.use(async (socket, next) => {
   //session ID (private): used to authenticate user upon reconnection
   // username (public) : identifier for exchanging messages
   const sessionID = socket.handshake.auth.sessionID
   if (sessionID) {
     //find existing session
-    const session = sessionStore.findSession(sessionID)
+    const session = await sessionStore.findSession(sessionID)
     if (session) {
       socket.sessionID = sessionID
       socket.userID = session.userID
@@ -52,9 +52,8 @@ io.use((socket, next) => {
   next()
 })
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   //persist session
-
   sessionStore.saveSession(socket.sessionID, {
     userID: socket.userID,
     username: socket.username,
@@ -72,8 +71,12 @@ io.on("connection", (socket) => {
 
   //fetch existing users
   const users = []
+  const [messages, sessions] = await Promise.all([
+    messageStore.findMessagesForUser(socket.userID),
+    sessionStore.findAllSessions(),
+  ])
   const messagesPerUser = new Map()
-  messageStore.findMessagesForUser(socket.userID).forEach((message) => {
+  messages.forEach((message) => {
     const { from, to } = message
     const otherUser = socket.userID === from ? to : from
     if (messagesPerUser.has(otherUser)) {
@@ -83,7 +86,7 @@ io.on("connection", (socket) => {
     }
   })
 
-  sessionStore.findAllSessions().forEach((session) => {
+  sessions.forEach((session) => {
     users.push({
       userID: session.userID,
       username: session.username,
