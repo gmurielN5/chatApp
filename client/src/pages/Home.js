@@ -3,7 +3,7 @@ import { Message } from "../Components/Message"
 
 import "../Style/home.scss"
 
-const Home = () => {
+export const Home = () => {
   return (
     <main className="homepage">
       <div className="left-panel">
@@ -15,5 +15,3 @@ const Home = () => {
     </main>
   )
 }
-
-export default Home

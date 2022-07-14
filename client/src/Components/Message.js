@@ -23,15 +23,20 @@ export const Message = () => {
                 <span>{player.connected ? "online" : "offline"}</span>
               </div>
             </div>
-            {player.message &&
-              player.message.map((msg) => (
-                <div className="message">
-                  <div className={`msg ${msg.fromSelf ? "msg-right" : ""}`}>
-                    <p>{msg.content}</p>
-                    {msg.fromSelf && <span>you</span>}
-                  </div>
-                </div>
-              ))}
+            <div className="message">
+              <ul>
+                {player.messages &&
+                  player.messages.map((msg, i) => (
+                    <li
+                      key={i}
+                      className={`msg ${msg.fromSelf ? "msg-right" : ""}`}
+                    >
+                      <p>{msg.content}</p>
+                      {msg.fromSelf && <span>you</span>}
+                    </li>
+                  ))}
+              </ul>
+            </div>
             <Chat player={player} key={player.userID} />
           </div>
         ) : null

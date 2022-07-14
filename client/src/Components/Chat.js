@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { context } from "../context"
 import { Field, Form, Formik } from "formik"
 import * as Yup from "yup"
+
 import "../Style/chat.scss"
 
 export const Chat = ({ player }) => {
@@ -19,14 +20,14 @@ export const Chat = ({ player }) => {
             content: values.message,
             to: player.userID,
           })
-          //todo fix adding value to array of message
+
           setPlayers((prevState) => {
             const updatePlayer = prevState.map((obj) => {
               if (obj.userID === player.userID) {
-                return {
-                  ...obj,
-                  message: [{ content: values.message, fromSelf: true }],
-                }
+                const messages = [...obj.messages]
+                let newMessage = { content: values.message, fromSelf: true }
+                messages.push(newMessage)
+                return { ...obj, messages }
               }
               return obj
             })

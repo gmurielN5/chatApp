@@ -24,21 +24,18 @@ export const User = ({ user }) => {
         onClick={() => handleClick(user)}
         className={`user ${user.selected ? "selected" : ""}`}
       >
-        <div className="profile">
-          <div className="name">
-            <p>
-              {user.username} {user.self ? " (yourself)" : ""}
-            </p>
-          </div>
-          {user.hasNewmessage && (
-            <div className="new-messsage">
-              <span>1</span>
-            </div>
-          )}
+        <div>
+          <p>
+            {user.username} {user.self ? " (yourself)" : ""}
+          </p>
         </div>
         <div className="status">
           <i className={`icon ${user.connected ? "connected" : ""}`}></i>
           <span>{user.connected ? "online" : "offline"}</span>
+        </div>
+        {/* conditionnaly render div if hasNewmessage is true */}
+        <div className="new-message">
+          {/* add icon and return number of messages waiting */}
         </div>
       </div>
     </div>

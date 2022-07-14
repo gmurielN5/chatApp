@@ -1,14 +1,13 @@
 import { useContext } from "react"
 import { context } from "../context"
 import { Form, Field, Formik } from "formik"
-import { useNavigate } from "react-router"
 import * as Yup from "yup"
 
 import "../Style/login.scss"
 
 export const Login = () => {
-  const { setUser, user, socket } = useContext(context)
-  const navigate = useNavigate()
+  const { socket, setIsLoggedIn } = useContext(context)
+
   const validateUsername = Yup.object().shape({
     username: Yup.string()
       .min(2, "Too Short!")
@@ -28,11 +27,10 @@ export const Login = () => {
           validationSchema={validateUsername}
           onSubmit={(values) => {
             const username = values.username
-            setUser({ ...user, loggedIn: true })
             if (username) {
               socket.auth = { username }
               socket.connect()
-              navigate("/home")
+              setIsLoggedIn(true)
             }
           }}
         >

@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { User } from "./user"
+import { Player } from "./player"
 import { context } from "../context"
 import "../Style/sidebar.scss"
 
@@ -7,11 +7,11 @@ const Sidebar = () => {
   const { players } = useContext(context)
   return (
     <div className="sidebar">
-      <h2>users connected : {players.length}</h2>
+      <h2>players connected : {players.length}</h2>
       {players && players.length > 0 ? (
-        players.map((user) => <User user={user} key={user.userID} />)
+        players.map((player) => <Player player={player} key={player.userID} />)
       ) : (
-        <p>loading users...</p>
+        <p>loading players...</p>
       )}
     </div>
   )

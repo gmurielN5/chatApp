@@ -4,11 +4,8 @@ import socketconn from "./socket"
 const context = createContext()
 
 const ContextApp = ({ children }) => {
-  //add token in user state
-  const [user, setUser] = useState({
-    loggedIn: null,
-    sessionID: localStorage.getItem("sessionID"),
-  })
+  const [sessionID] = useState(localStorage.getItem("sessionID"))
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [players, setPlayers] = useState([])
   const [socket, setSocket] = useState(socketconn)
 
@@ -19,8 +16,9 @@ const ContextApp = ({ children }) => {
   return (
     <context.Provider
       value={{
-        user,
-        setUser,
+        sessionID,
+        isLoggedIn,
+        setIsLoggedIn,
         players,
         setPlayers,
         socket,

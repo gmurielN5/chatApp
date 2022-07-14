@@ -1,0 +1,57 @@
+@import "./globals";
+.player {
+  width: 100%;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  border: 1px solid $secondaryColor;
+  .profile {
+    display: flex;
+    margin-top: 10px;
+    padding-right: 10px;
+    .name {
+      width: 100%;
+    }
+    .new-messsage {
+      height: 18px;
+      width: 18px;
+      background-color: $blue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      span {
+        font-size: small;
+      }
+    }
+  }
+  .status {
+    padding-left: 10px;
+    .icon {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: red;
+    }
+    .connected {
+      background-color: green;
+    }
+    span {
+      padding-left: 5px;
+      font-size: small;
+      color: $secondaryColor;
+    }
+  }
+}
+.active {
+  background-color: $whiteColor;
+  p {
+    color: $secondaryColor;
+  }
+}
+.selected {
+  background-color: $blue;
+  p {
+    color: $whiteColor;
+  }
+}
