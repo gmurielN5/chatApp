@@ -1,30 +1,40 @@
 const express = require("express")
-const { createServer } = require("http")
 const { Server } = require("socket.io")
+const Redis = require("ioredis")
+const { setupWorker } = require("@socket.io/sticky")
+
+const { corsConfig } = require("./corsConfig")
+const cors = require("cors")
 
 const app = express()
-const httpServer = createServer(app)
-const io = new Server(httpServer)
+const server = require("http").createServer(app)
 
-const port = 8000
+const redisClient = new Redis()
+const io = new Server(server, {
+  cors: corsConfig,
+  adapter: require("socket.io-redis")({
+    pubClient: redisClient,
+    subClient: redisClient.duplicate(),
+  }),
+})
 
-const cors = require("cors")
-const util = require("util")
 const crypto = require("crypto")
 
 const randomId = () => crypto.randomBytes(8).toString("hex")
-const { findSesssion, saveSession, findAllSessions } = require("./SessionStore")
+const { InMemorySessionStore } = require("./sessionStore")
+const { InMemoryMessageStore } = require("./messageStore")
+const sessionStore = new InMemorySessionStore()
+const messageStore = new InMemoryMessageStore()
 
-app.use(cors())
-
-//session ID (private): used to authenticate user upon reconnection
-// username (public) : identifier for exchanging messages
+app.use(cors(corsConfig))
 
 io.use((socket, next) => {
+  //session ID (private): used to authenticate user upon reconnection
+  // username (public) : identifier for exchanging messages
   const sessionID = socket.handshake.auth.sessionID
   if (sessionID) {
     //find existing session
-    const session = findSesssion(sessionID)
+    const session = sessionStore.findSession(sessionID)
     if (session) {
       socket.sessionID = sessionID
       socket.userID = session.userID
@@ -43,13 +53,15 @@ io.use((socket, next) => {
 })
 
 io.on("connection", (socket) => {
-  //add session
-  const user = saveSession(socket.sessionID, {
+  //persist session
+
+  sessionStore.saveSession(socket.sessionID, {
     userID: socket.userID,
     username: socket.username,
     connected: true,
   })
 
+  //emit session details
   socket.emit("session", {
     sessionID: socket.sessionID,
     userID: socket.userID,
@@ -58,38 +70,64 @@ io.on("connection", (socket) => {
   // join the "userID" room
   socket.join(socket.userID)
 
-  //send session details to client
+  //fetch existing users
   const users = []
-  for (let [id, socket] of io.of("/").sockets) {
-    users.push({
-      userID: id,
-      username: socket.username,
-      connected: socket.connected,
-    })
-  }
+  const messagesPerUser = new Map()
+  messageStore.findMessagesForUser(socket.userID).forEach((message) => {
+    const { from, to } = message
+    const otherUser = socket.userID === from ? to : from
+    if (messagesPerUser.has(otherUser)) {
+      messagesPerUser.get(otherUser).push(message)
+    } else {
+      messagesPerUser.set(otherUser, [message])
+    }
+  })
 
+  sessionStore.findAllSessions().forEach((session) => {
+    users.push({
+      userID: session.userID,
+      username: session.username,
+      connected: session.connected,
+      messages: messagesPerUser.get(session.userID) || [],
+    })
+  })
+
+  // send existing users to client
   socket.emit("users", users)
-  socket.broadcast.emit("new user connected", {
-    userID: socket.id,
+
+  // notify existing users
+  socket.broadcast.emit("user connected", {
+    userID: socket.userID,
     username: socket.username,
     connected: true,
+    messages: [],
   })
 
   socket.on("private message", ({ content, to }) => {
-    socket.to(to).emit("private message", {
+    const message = {
       content,
-      from: socket.id,
-    })
+      from: socket.userID,
+      to,
+    }
+    socket.to(to).to(socket.userID).emit("private message", message)
+    messageStore.saveMessage(message)
   })
 
-  //user leave room
-  //notify the other user is disconnected
-  socket.on("disconnect", () => {
-    console.log("user disconnected")
+  //notify users upon disconnection
+  socket.on("disconnect", async () => {
+    const matchingSockets = await io.in(socket.userID).allSockets()
+    const isDisconnected = matchingSockets.size === 0
+    if (isDisconnected) {
+      //notify other users
+      socket.broadcast.emit("user disconnected", socket.userID)
+      // update the connection status of the session
+      sessionStore.saveSession(socket.sessionID, {
+        userID: socket.userID,
+        username: socket.username,
+        connected: false,
+      })
+    }
   })
 })
 
-httpServer.listen(
-  port,
-  console.log(`Server is running on the port no: ${port} `)
-)
+setupWorker(io)
