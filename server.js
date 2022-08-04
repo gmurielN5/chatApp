@@ -3,8 +3,8 @@ const { Server } = require("socket.io")
 const Redis = require("ioredis")
 const { setupWorker } = require("@socket.io/sticky")
 
-const { corsConfig } = require("./corsConfig")
 const cors = require("cors")
+const { corsConfig } = require("./corsConfig")
 
 const app = express()
 const server = require("http").createServer(app)
