@@ -6,9 +6,7 @@ import { Home } from "./pages/Home"
 
 function App() {
   useSocket()
-  const { socket, isLoggedIn, players } = useContext(context)
-  console.log(socket)
-  console.log(players)
+  const { isLoggedIn } = useContext(context)
 
   return <>{isLoggedIn ? <Home /> : <Login />}</>
 }
